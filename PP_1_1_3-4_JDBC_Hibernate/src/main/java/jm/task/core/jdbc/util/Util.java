@@ -7,7 +7,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 
-import java.sql.*;
 import java.util.Properties;
 
 public class Util {
@@ -17,9 +16,7 @@ public class Util {
     private static final String password = "12345678";
     private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String dialect = "org.hibernate.dialect.MySQL5Dialect";
-    private static final String UPDATE = "update";
 
-    private static Connection connection = null;
     private static SessionFactory sessionFactory = null;
 
 
@@ -44,27 +41,9 @@ public class Util {
     }
 
 
-    public static Connection getConnection() {
-        try {
-            Class.forName(driver);
-            connection = DriverManager.getConnection(url, user, password);
-            return connection;
-        } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
-        }
-        return null;
-    }
-
     public static void closeAll() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-            if (sessionFactory != null && !sessionFactory.isClosed()) {
-                sessionFactory.close();
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        if (sessionFactory != null && !sessionFactory.isClosed()) {
+            sessionFactory.close();
         }
     }
 }
